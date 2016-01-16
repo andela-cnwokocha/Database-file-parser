@@ -20,11 +20,11 @@ public class DbWriter implements DbUtils {
   private Connection connection = null;
   private String  MYSQL_DRIVER = "com.mysql.jdbc.Driver";
   private ArrayList<String> availableDatabases = new ArrayList<String>();
-  private ArrayList<String> columnFIelds = new ArrayList<String>();
+  private ArrayList<String> columnFields = new ArrayList<String>();
 
   public DbWriter(String dbname, ArrayList<String> fieldnames){
     this.dbname = dbname;
-    this.columnFIelds = fieldnames;
+    this.columnFields = fieldnames;
   }
 
 
@@ -58,12 +58,13 @@ public class DbWriter implements DbUtils {
 
   public ArrayList<String> getAvailableDatabases() throws SQLException{
     establishConnection(MYSQL_DRIVER);
+    ArrayList<String> allDatabases = new ArrayList<>();
     ResultSet databases = this.connection.getMetaData().getCatalogs();
     while(databases.next()){
-      this.availableDatabases.add(databases.getString(1));
+      allDatabases.add(databases.getString(1));
+      this.availableDatabases = allDatabases;
     }
-
-    return this.availableDatabases;
+    return allDatabases;
   }
 
   @Override
@@ -107,18 +108,25 @@ public class DbWriter implements DbUtils {
   }
 
   @Override
-  public boolean insertToDatabaseTable(HashedArray bufferedRow, String databasename, String tablename) throws SQLException {
-    int size = this.columnFIelds.size();
-    System.out.println("This is the size of the columns in the database " + size);
-    System.out.println(insertIntoTableString(size,databasename,tablename));
-    PreparedStatement preparedstatement = connectToDb(databasename).prepareStatement(insertIntoTableString(size,databasename,tablename));
-    ArrayList<String> allKeys = this.columnFIelds;
+  public boolean insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename, String tablename) throws SQLException {
+
+    int size = this.columnFields.size();
+   PreparedStatement preparedstatement = connectToDb(databasename).prepareStatement(insertIntoTableString(size,databasename,tablename));
+    ArrayList<String> allKeys = this.columnFields;
 
     for(int column = 0; column < size; column++){
-      preparedstatement.setString(column+1,inserter(allKeys.get(column),bufferedRow.getBufferRow()));
+      preparedstatement.setString(column+1,inserter(allKeys.get(column),row));
     }
-    return (preparedstatement.executeUpdate() == 1);
 
+    return (preparedstatement.executeUpdate() == 1);
+  }
+
+  private String inserter(String key, HashMap<String,ArrayList<String>> row){
+    String value = null;
+    if(row.containsKey(key)){
+      value = row.get(key).toString();
+    }
+    return value;
   }
 
   @Override
@@ -158,16 +166,8 @@ public class DbWriter implements DbUtils {
     return numberOfColumns;
   }
 
-  private String inserter(String key, HashMap<String,ArrayList<String>> row){
-    String value = null;
-    if(row.containsKey(key)){
-      value = row.get(key).toString();
-    }
-    return value;
-  }
-
   public void setAttributeList(ArrayList<String> columns){
-   this.columnFIelds = columns;
+   this.columnFields = columns;
   }
 
   private void setDbUrl(String dburl){

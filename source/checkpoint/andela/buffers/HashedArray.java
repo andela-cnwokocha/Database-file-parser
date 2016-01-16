@@ -36,6 +36,11 @@ public class HashedArray {
     return hashed;
   }
 
+  public HashMap<String, ArrayList<String>> gethashes() {
+    return this.hashes;
+  }
+
+
   public int getRowKeyValSize(String key) throws DbWriterException {
     int size;
     if(rowHasKey(key)){

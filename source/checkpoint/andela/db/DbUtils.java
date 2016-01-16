@@ -27,7 +27,7 @@ public interface DbUtils {
   boolean createDatabaseTable(String databasename, String tablename, ArrayList<String> databaseFields) throws SQLException, DbWriterException;
 
   // done
-  boolean insertToDatabaseTable(HashedArray bufferedRow, String databasename, String tablename) throws SQLException;
+  boolean insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename, String tablename) throws SQLException;
 
   //done
   Connection connectToDb(String connectionType) throws SQLException;
