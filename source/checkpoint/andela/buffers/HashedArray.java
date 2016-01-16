@@ -30,7 +30,10 @@ public class HashedArray {
   }
 
   public HashMap<String, ArrayList<String>> getBufferRow(){
-    return this.hashes;
+    HashMap<String, ArrayList<String>> hashed = new HashMap<String, ArrayList<String>>();
+    hashed = this.hashes;
+    this.hashes = new HashMap<String, ArrayList<String>>();
+    return hashed;
   }
 
   public int getRowKeyValSize(String key) throws DbWriterException {
