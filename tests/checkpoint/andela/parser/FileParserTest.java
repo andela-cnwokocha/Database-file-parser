@@ -14,7 +14,8 @@ public class FileParserTest {
     FileParser fp = new FileParser("/home/chidi/Desktop/writeTo.log");
 
     fp.readFile("/", " - ","#");
-    assertTrue(fp.numberOfRows() == 13);
+    assertTrue(fp.numberOfRows() == 20);
+
   }
 
   @Test
