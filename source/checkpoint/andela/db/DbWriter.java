@@ -28,7 +28,6 @@ public class DbWriter implements DbUtils {
   }
 
 
-
   private Connection establishConnection(String connectionDriver) throws SQLException {
     registerDriver(connectionDriver);
     this.connection = DriverManager.getConnection(this.dbUrl, this.dbUser, this.dbPassword);
@@ -103,24 +102,23 @@ public class DbWriter implements DbUtils {
   @Override
   public boolean createDatabaseTable(String databasename, String tablename, ArrayList<String> tableFields) throws SQLException {
     setAttributeList(tableFields);
-
     Statement statement = connectToDb(databasename).createStatement();
     return (statement.executeUpdate(createTableQuery(tableFields,tablename,"text")) == 0);
   }
 
   @Override
   public boolean insertToDatabaseTable(HashedArray bufferedRow, String databasename, String tablename) throws SQLException {
-
-    int tableColumnSize = tableColumns(tablename) - 1;
-    System.out.println(tableColumnSize);
-    PreparedStatement preparedstatement = this.connection.prepareStatement(insertIntoTableString(tableColumnSize,databasename,tablename));
+    int size = this.columnFIelds.size();
+    System.out.println("This is the size of the columns in the database " + size);
+    System.out.println(insertIntoTableString(size,databasename,tablename));
+    PreparedStatement preparedstatement = connectToDb(databasename).prepareStatement(insertIntoTableString(size,databasename,tablename));
     ArrayList<String> allKeys = this.columnFIelds;
 
-    for(int column = 0; column < tableColumnSize; column++){
+    for(int column = 0; column < size; column++){
       preparedstatement.setString(column+1,inserter(allKeys.get(column),bufferedRow.getBufferRow()));
     }
-
     return (preparedstatement.executeUpdate() == 1);
+
   }
 
   @Override
@@ -140,8 +138,8 @@ public class DbWriter implements DbUtils {
 
   }
 
-  private String insertIntoTableString(int fieldsSize, String databasename, String tablename){
-    String update = "Insert into "+databasename+"."+tablename+" values(default,";
+  public String insertIntoTableString(int fieldsSize, String databasename, String tablename){
+    String update = "Insert Into "+databasename+"."+tablename+" values(default,";
     for(int field = 0; field < fieldsSize; field++){
       update+="?,";
     }
