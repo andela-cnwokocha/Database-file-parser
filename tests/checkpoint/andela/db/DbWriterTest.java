@@ -134,10 +134,10 @@ public class DbWriterTest {
     HashedArray hashedArray = new HashedArray();
 
     hashedArray.addToBufferRow("UNIQUE-ID","Chidiebere");
-    hashedArray.addToBufferRow("CLASS", "Andela");
+    //hashedArray.addToBufferRow("CLASS", "Andela");
     hashedArray.addToBufferRow("UNIQUE-ID","Nwokocha");
-    hashedArray.addToBufferRow("CLASS", "Youth tech");
-    hashedArray.addToBufferRow("LEFT","handed");
+    //hashedArray.addToBufferRow("CLASS", "Youth tech");
+    //hashedArray.addToBufferRow("LEFT","handed");
     hashedArray.addToBufferRow("RIGHT", "Food");
     hashedArray.addToBufferRow("RIGHT","CLeft hand");
     hashedArray.addToBufferRow("OCTRO", "kwamdle");
