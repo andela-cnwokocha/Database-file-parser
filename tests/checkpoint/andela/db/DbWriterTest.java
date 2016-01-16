@@ -36,6 +36,7 @@ public class DbWriterTest {
 
 
     DbWriter writer = new DbWriter("Horatio", fields);
+
     assertTrue(writer.getAvailableDatabases().contains("mysql"));
     assertFalse(writer.getAvailableDatabases().contains("Holey"));
 
@@ -142,8 +143,8 @@ public class DbWriterTest {
     hashedArray.addToBufferRow("RIGHT","CLeft hand");
     hashedArray.addToBufferRow("OCTRO", "kwamdle");
 
-    //writer.createDatabase("Alonso");
-    //writer.createDatabaseTable("Alonso", "friends", fields);
+    writer.createDatabase("Alonso");
+    writer.createDatabaseTable("Alonso", "friends", fields);
 
     writer.insertToDatabaseTable(hashedArray,"Alonso","friends");
 
@@ -160,6 +161,6 @@ public class DbWriterTest {
 
     DbWriter writer = new DbWriter("Bulldoze", fields);
 
-    assertTrue(writer.insertIntoTableString(fields.size(),"Bulldoze", "cars").equals("Insert into Bulldoze.cars values(default,?,?,?,?,?)"));
+    assertTrue(writer.insertIntoTableString(fields.size(),"Bulldoze", "cars").equals("Insert Into Bulldoze.cars values(default,?,?,?,?,?)"));
   }
 }

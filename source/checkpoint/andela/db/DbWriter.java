@@ -58,12 +58,13 @@ public class DbWriter implements DbUtils {
 
   public ArrayList<String> getAvailableDatabases() throws SQLException{
     establishConnection(MYSQL_DRIVER);
+    ArrayList<String> allDatabases = new ArrayList<>();
     ResultSet databases = this.connection.getMetaData().getCatalogs();
     while(databases.next()){
-      this.availableDatabases.add(databases.getString(1));
+      allDatabases.add(databases.getString(1));
+      this.availableDatabases = allDatabases;
     }
-
-    return this.availableDatabases;
+    return allDatabases;
   }
 
   @Override
