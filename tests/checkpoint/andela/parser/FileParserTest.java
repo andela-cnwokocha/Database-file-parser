@@ -19,13 +19,15 @@ public class FileParserTest {
   }
 
   @Test
-  public void testCheckingFIleExistence() throws Exception {
+  public void testThatDataIsProperlyMappedByRows() throws Exception {
     FileParser fp = new FileParser("/home/chidi/Desktop/writeTo.log");
 
-    fp.createFile("/home/chidi/Desktop/donkey.txt");
+    assertFalse(fp.getLogBufferSize() == 20);
 
-    File file = new File("/home/chidi/Desktop/donkey.txt");
-    assertTrue(file.exists());
+    fp.readFile("/", " - ","#");
+
+    assertTrue(fp.getLogBufferSize() == 20);
   }
+
 
 }

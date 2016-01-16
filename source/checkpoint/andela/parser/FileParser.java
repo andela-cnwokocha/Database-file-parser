@@ -25,6 +25,8 @@ public class FileParser {
 
   private BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(20);
 
+  private List<String> logb = new ArrayList<>();
+
 
   public FileParser(String filetoberead) {
     this.filepath = filetoberead;
@@ -53,23 +55,17 @@ public class FileParser {
         }else if(line.startsWith(rowDelimiter)){
           String uniqueId = row.getUniqueId();
           logBuffer.put(threadActivityString(uniqueId));
-          System.out.println(threadActivityString(uniqueId));
+          logb.add(threadActivityString(uniqueId));
           fileBuffer.put(this.row.getBufferRow());
-          System.out.println(numberOfRows++);
         }else {
           processLine(line,delimiter);
-          System.out.println("reading .....");
-          System.out.println(numberOfRows);
         }
       }
     }
   }
+
   public int numberOfRows(){
     return this.numberOfRows;
-  }
-
-  public void createFile(String filePath) {
-
   }
 
   public String threadActivityString(String uniqueid) {
@@ -80,8 +76,13 @@ public class FileParser {
     return "FileParser thread ("+myDate+" "+myTime+") wrote UNIQUE ID "+uniqueid+" to buffer.\n";
   }
 
-  public void processLine(String line, String delimiter) {
+  private void processLine(String line, String delimiter) {
     String[] rowColumn = line.split(delimiter);
     row.addToBufferRow(rowColumn[0].trim(),rowColumn[1].trim());
   }
+
+  public int getLogBufferSize() {
+    return this.logb.size();
+  }
+
 }
