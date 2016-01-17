@@ -1,11 +1,14 @@
 package checkpoint.andela.parser;
 
 import checkpoint.andela.buffers.*;
+import checkpoint.andela.db.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
+import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.Date;
 import java.util.concurrent.*;
 
 /**
@@ -13,59 +16,40 @@ import java.util.concurrent.*;
  *
  * This class is the class which parses values from a file to a Buffer, that it. The file to be parsed has properties like the row delimiter, and column delimiter. In this class, the default row delimiter is //.-
  */
-public class FileParser {
+public class FileParser implements Runnable{
 
   private String filepath;
-  private String rowDelimiter;
-  private String delimiter;
-  private int numberOfRows = 0;
   private HashedArray row = new HashedArray();
+  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer;
+  private BlockingQueue<String> logBuffer;
 
-  private BlockingQueue<HashMap<String, ArrayList<String>>> fileBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(20);
-
-  private BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(20);
-
-  private List<String> logb = new ArrayList<>();
-
-
-  public FileParser(String filetoberead) {
+  public FileParser(String filetoberead, BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer,BlockingQueue<String> logbuffer) {
     this.filepath = filetoberead;
+    this.fileToDbBuffer = fileToDbBuffer;
+    this.logBuffer = logbuffer;
   }
 
-  public void setFilePath(String filepath){
-    this.filepath = filepath;
-  }
-
-  public String getFilePath(){
-    return this.filepath;
-  }
-
-  public void setRowDelimiter(String rowDelimiter){
-    this.rowDelimiter = rowDelimiter;
-  }
-
-  public void readFile(String rowDelimiter, String delimiter, String toignore) throws IOException, InterruptedException{
-
-    Path filepath = Paths.get(getFilePath());
-    try(BufferedReader reader = Files.newBufferedReader(filepath, StandardCharsets.ISO_8859_1)){
-      String line;
-      while((line = reader.readLine()) != null ){
-        if(line.startsWith(toignore)){
-          ;
-        }else if(line.startsWith(rowDelimiter)){
-          String uniqueId = row.getUniqueId();
-          logBuffer.put(threadActivityString(uniqueId));
-          logb.add(threadActivityString(uniqueId));
-          fileBuffer.put(this.row.getBufferRow());
-        }else {
-          processLine(line,delimiter);
+  @Override
+  public void run() {
+    Path filepath = Paths.get(this.filepath);
+    try{
+      try(BufferedReader reader = Files.newBufferedReader(filepath, StandardCharsets.ISO_8859_1)){
+        String line;
+        while((line = reader.readLine()) != null){
+          if(line.startsWith("#")){;
+          }else if(line.startsWith("/")){
+            String uniqueid = row.getUniqueId();
+            //Add to buffers
+            logBuffer.put(threadActivityString(uniqueid));
+            fileToDbBuffer.put(this.row.getBufferRow());
+          }else {
+            processLine(line," - ");
+          }
         }
       }
+    }catch(IOException | InterruptedException ie){
+      ie.getMessage();
     }
-  }
-
-  public int numberOfRows(){
-    return this.numberOfRows;
   }
 
   public String threadActivityString(String uniqueid) {
@@ -81,8 +65,5 @@ public class FileParser {
     row.addToBufferRow(rowColumn[0].trim(),rowColumn[1].trim());
   }
 
-  public int getLogBufferSize() {
-    return this.logb.size();
-  }
 
 }
