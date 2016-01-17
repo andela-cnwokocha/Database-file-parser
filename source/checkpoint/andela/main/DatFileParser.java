@@ -29,7 +29,6 @@ public class DatFileParser {
     Logger logger = new Logger(logBuffer,outputpath);
 
     ExecutorService executor = Executors.newFixedThreadPool(6);
-
     executor.submit(fileParser);
     executor.submit(dbwriter);
     executor.submit(logger);

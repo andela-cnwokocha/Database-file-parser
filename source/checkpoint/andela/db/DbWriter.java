@@ -16,7 +16,6 @@ public class DbWriter implements DbUtils {
   private String dbUser = "root";
   private String dbPassword = "exo14141";
 
-  private String dbname;
   private Connection connection = null;
   private String  MYSQL_DRIVER = "com.mysql.jdbc.Driver";
   private ArrayList<String> availableDatabases = new ArrayList<String>();
@@ -159,18 +158,6 @@ public class DbWriter implements DbUtils {
 
   public void setAttributeList(ArrayList<String> columns){
    this.columnFields = columns;
-  }
-
-  private void setDbUrl(String dburl){
-    this.dbUrl = dburl;
-  }
-
-  private void setDbUser(String dbuser){
-    this.dbUrl = dbuser;
-  }
-
-  private void setDbPassword(String dbPassword){
-    this.dbUrl = dbPassword;
   }
 
 }

@@ -18,22 +18,22 @@ public class Logger implements Runnable{
   }
 
   public void run() {
-    try{
-      logActivity();
-    }catch(IOException | InterruptedException ie){
-      System.err.println(ie.getMessage());
+    while(true){
+      try{
+        logActivity();
+      }catch(IOException | InterruptedException ie){
+        System.err.println(ie.getMessage());
+      }
     }
   }
 
   private void logActivity() throws IOException,InterruptedException{
-    for(int i = 0; i < 20; i++){
       try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(this.writeToPath, true)))) {
         String activity = logbuffer.take();
         out.println(activity);
       }catch (IOException e) {
         System.err.println(e);
       }
-    }
   }
 
 }
