@@ -22,9 +22,8 @@ public class DbWriter implements DbUtils {
   private ArrayList<String> availableDatabases = new ArrayList<String>();
   private ArrayList<String> columnFields = new ArrayList<String>();
 
-  public DbWriter(String dbname, ArrayList<String> fieldnames){
-    this.dbname = dbname;
-    this.columnFields = fieldnames;
+  public DbWriter(){
+
   }
 
 
@@ -87,6 +86,7 @@ public class DbWriter implements DbUtils {
     if(!isDatabaseExist(databasename)){
       Statement statement = this.connection.createStatement();
       update = statement.executeUpdate("Create database "+databasename);
+      closeResources(statement);
     }else {
       throw new DbWriterException("Exception: Database " + databasename + " already exists!");
     }
@@ -104,21 +104,24 @@ public class DbWriter implements DbUtils {
   public boolean createDatabaseTable(String databasename, String tablename, ArrayList<String> tableFields) throws SQLException {
     setAttributeList(tableFields);
     Statement statement = connectToDb(databasename).createStatement();
-    return (statement.executeUpdate(createTableQuery(tableFields,tablename,"text")) == 0);
+    int success = statement.executeUpdate(createTableQuery(tableFields,tablename,"text"));
+
+    closeResources(statement);
+    return success == 0;
   }
 
   @Override
-  public boolean insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename, String tablename) throws SQLException {
+  public Connection insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename, String tablename,ArrayList<String> rowSize) throws SQLException {
 
-    int size = this.columnFields.size();
-   PreparedStatement preparedstatement = connectToDb(databasename).prepareStatement(insertIntoTableString(size,databasename,tablename));
-    ArrayList<String> allKeys = this.columnFields;
+    Connection conn = connectToDb(databasename);
+   PreparedStatement preparedstatement = conn.prepareStatement(insertIntoTableString(rowSize.size(),databasename,tablename));
+    ArrayList<String> allKeys = rowSize;
 
-    for(int column = 0; column < size; column++){
+    for(int column = 0; column < rowSize.size(); column++){
       preparedstatement.setString(column+1,inserter(allKeys.get(column),row));
     }
-
-    return (preparedstatement.executeUpdate() == 1);
+    preparedstatement.executeUpdate();
+    return conn;
   }
 
   private String inserter(String key, HashMap<String,ArrayList<String>> row){
@@ -154,18 +157,6 @@ public class DbWriter implements DbUtils {
     return update.substring(0,update.length() - 1).concat(")");
   }
 
-  private int tableColumns(String tablename) throws SQLException {
-    Integer numberOfColumns = 0;
-
-    DatabaseMetaData databaseMetaData = this.connection.getMetaData();
-    try(ResultSet rs = databaseMetaData.getColumns(null,null,tablename,null)){
-      while(rs.next()){
-        numberOfColumns++;
-      }
-    }
-    return numberOfColumns;
-  }
-
   public void setAttributeList(ArrayList<String> columns){
    this.columnFields = columns;
   }
@@ -181,4 +172,5 @@ public class DbWriter implements DbUtils {
   private void setDbPassword(String dbPassword){
     this.dbUrl = dbPassword;
   }
+
 }

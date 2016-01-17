@@ -20,8 +20,8 @@ public class FileParser implements Runnable{
 
   private String filepath;
   private HashedArray row = new HashedArray();
-  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer;
-  private BlockingQueue<String> logBuffer;
+  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(20);
+  private BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(10);
 
   public FileParser(String filetoberead, BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer,BlockingQueue<String> logbuffer) {
     this.filepath = filetoberead;
@@ -31,12 +31,13 @@ public class FileParser implements Runnable{
 
   @Override
   public void run() {
-    Path filepath = Paths.get(this.filepath);
+   Path filepath = Paths.get(this.filepath);
     try{
       try(BufferedReader reader = Files.newBufferedReader(filepath, StandardCharsets.ISO_8859_1)){
         String line;
         while((line = reader.readLine()) != null){
-          if(line.startsWith("#")){;
+          if(line.startsWith("#")){
+            ;
           }else if(line.startsWith("/")){
             String uniqueid = row.getUniqueId();
             //Add to buffers
@@ -50,6 +51,7 @@ public class FileParser implements Runnable{
     }catch(IOException | InterruptedException ie){
       ie.getMessage();
     }
+
   }
 
   public String threadActivityString(String uniqueid) {
