@@ -36,21 +36,6 @@ public class HashedArray {
     return hashed;
   }
 
-  public HashMap<String, ArrayList<String>> gethashes() {
-    return this.hashes;
-  }
-
-
-  public int getRowKeyValSize(String key) throws DbWriterException {
-    int size;
-    if(rowHasKey(key)){
-      size = hashes.get(key).size();
-    }else{
-      throw new DbWriterException("Exception: No such key");
-    }
-    return size;
-  }
-
   public void addToBufferRow(String key, String value){
     if(rowHasKey(key)){
       hashes.get(key).add(value);
