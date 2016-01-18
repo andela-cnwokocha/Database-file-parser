@@ -11,11 +11,11 @@ import java.util.concurrent.*;
  * Created by chidi on 1/17/16.
  */
 public class DatFileParser {
-  private static BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(20);
-  private static BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(20);
+  private static BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(10);
+  private static BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(10);
   private static String outputpath;
   private static String inputpath;
-  private static String[] tableColumns = {"UNIQUE-ID","TYPES","COMMON-NAME","ATOM-MAPPINGS","CANNOT-BALANCE?","CITATIONS","COMMENT","COMMENT-INTERNAL","CREDITS","DATA-SOURCE","DBLINKS","DELTAG0","DOCUMENTATION","EC-NUMBER","ENZYMATIC-REACTION","ENZYMES-NOT-USED","EQUILIBRIUM-CONSTANT","HIDE-SLOT?","IN-PATHWAY","INSTANCE-NAME-TEMPLATE","LEFT","MEMBER-SORT-FN","ORPHAN?","PATHOLOGIC-NAME-MATCHER-EVIDENCE","PATHOLOGIC-PWY-EVIDENCE","PHYSIOLOGICALLY-RELEVANT?","PREDECESSORS","PRIMARIES","REACTION-DIRECTION","REACTION-LIST","REGULATED-BY","REQUIREMENTS","RIGHT","RXN-LOCATIONS","SIGNAL","SPECIES","SPONTANEOUS?","STD-REDUCTION-POTENTIAL","SYNONYMS","SYSTEMATIC-NAME","TEMPLATE-FILE"};
+  private static String[] tableColumns = {"UNIQUE-ID","TYPES","COMMON-NAME","ATOM-MAPPINGS","CANNOT-BALANCE?","COMMENT","COMMENT-INTERNAL","CREDITS","DELTAG0","EC-NUMBER","ENZYMATIC-REACTION","IN-PATHWAY","LEFT","MEMBER-SORT-FN","ORPHAN?","PHYSIOLOGICALLY-RELEVANT?","PREDECESSORS","PRIMARIES","REACTION-DIRECTION","REACTION-LIST","RIGHT","RXN-LOCATIONS","SPONTANEOUS?","STD-REDUCTION-POTENTIAL","SYNONYMS","SYSTEMATIC-NAME",};
   ArrayList<String> columns = new ArrayList<>(Arrays.asList(tableColumns));
 
   public DatFileParser(String inputFilePath, String outputFilePath){
@@ -28,15 +28,13 @@ public class DatFileParser {
     FileParser fileParser = new FileParser(inputpath,fileToDbBuffer,logBuffer);
     Logger logger = new Logger(logBuffer,outputpath);
 
-    ExecutorService executor = Executors.newFixedThreadPool(6);
-    executor.submit(fileParser);
+    ExecutorService executor = Executors.newFixedThreadPool(4);
     executor.submit(dbwriter);
-    executor.submit(logger);
+    executor.submit(fileParser);
 
     executor.submit(logger);
 
     executor.awaitTermination(1, TimeUnit.HOURS);
-    //System.out.println("Finished working");
     executor.shutdown();
   }
 
@@ -51,7 +49,7 @@ public class DatFileParser {
     writer.createDatabaseTable("reactions", "react", columns);
 
     Thread.sleep(100);
-    // write to
+    // Implement processing from file to database and output file.
     datfp.parseToDb();
 
   }

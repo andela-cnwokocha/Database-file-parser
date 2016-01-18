@@ -20,7 +20,7 @@ public class FileParser implements Runnable{
 
   private String filepath;
   private HashedArray row = new HashedArray();
-  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(20);
+  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(10);
   private BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(10);
 
   public FileParser(String filetoberead, BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer,BlockingQueue<String> logbuffer) {

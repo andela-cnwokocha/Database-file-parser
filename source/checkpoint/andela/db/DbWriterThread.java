@@ -11,7 +11,7 @@ import java.util.concurrent.*;
  */
 public class DbWriterThread extends DbWriter implements Runnable {
   private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(10);
-  private BlockingQueue<HashMap<String,ArrayList<String>>> filetodbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(20);
+  private BlockingQueue<HashMap<String,ArrayList<String>>> filetodbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(10);
   private ArrayList<String> rowSize = new ArrayList<>();
 
   public DbWriterThread(BlockingQueue<String> logbuffer, BlockingQueue<HashMap<String,ArrayList<String>>>
