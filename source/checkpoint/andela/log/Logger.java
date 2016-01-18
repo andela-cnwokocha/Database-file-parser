@@ -1,15 +1,13 @@
 package checkpoint.andela.log;
 
 import java.io.*;
-import java.nio.charset.*;
-import java.nio.file.*;
 import java.util.concurrent.*;
 
 /**
  * Created by chidi on 1/17/16.
  */
 public class Logger implements Runnable{
-  private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(20);
+  private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(10);
   private String writeToPath;
 
   public Logger(BlockingQueue<String> logbuffer, String outputPath){
