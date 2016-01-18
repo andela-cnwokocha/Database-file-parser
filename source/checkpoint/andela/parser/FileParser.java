@@ -1,11 +1,9 @@
 package checkpoint.andela.parser;
 
 import checkpoint.andela.buffers.*;
-import checkpoint.andela.db.*;
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
-import java.sql.*;
 import java.text.*;
 import java.util.*;
 import java.util.Date;
@@ -59,7 +57,7 @@ public class FileParser implements Runnable{
     Locale myLocale = new Locale("en");
     String myTime = DateFormat.getTimeInstance(DateFormat.DEFAULT, myLocale).format(currentTime);
     String myDate = DateFormat.getDateInstance(DateFormat.DEFAULT, myLocale).format(currentTime);
-    return "FileParser thread ("+myDate+" "+myTime+") wrote UNIQUE ID "+uniqueid+" to buffer.\n";
+    return "FileParser thread ("+myDate+" "+myTime+") wrote UNIQUE ID ->"+uniqueid+" to buffer.\n";
   }
 
   private void processLine(String line, String delimiter) {

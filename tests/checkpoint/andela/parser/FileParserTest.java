@@ -20,14 +20,6 @@ public class FileParserTest {
   }
 
   @Test
-  public void testThatDataIsProperlyMappedByRows() throws Exception {
-    FileParser fp = new FileParser("/home/chidi/Desktop/writeTo.log");
-
-
-
-  }
-
-  @Test
   public void testWritingFromBufferToDb() throws Exception {
     ArrayList<String> fields = new ArrayList<>();
     fields.add("UNIQUE-ID");
