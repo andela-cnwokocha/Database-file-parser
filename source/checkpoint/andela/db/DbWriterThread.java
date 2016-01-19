@@ -6,9 +6,7 @@ import java.util.*;
 import java.util.Date;
 import java.util.concurrent.*;
 
-/**
- * Created by chidi on 1/17/16.
- */
+
 public class DbWriterThread extends DbWriter implements Runnable {
   private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(10);
   private BlockingQueue<HashMap<String,ArrayList<String>>> filetodbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(10);
