@@ -1,15 +1,9 @@
 package checkpoint.andela.db;
 
-import checkpoint.andela.buffers.*;
 import java.sql.*;
 import java.util.*;
 
-/**
- * Created by chidi on 1/15/16.
- *
- *
- * This class is for connecting a Mysql database, given the connction, and it extending the DbUtils interface. This class therefore carries out connecting to the database, and doing all the CRUD functions on the database given the row that was provided to the appropriate method. This class assumes the user is a root user, with password 1234567890 by default (which can be changed).
- */
+
 public class DbWriter implements DbUtils {
 
   private String dbUrl = "jdbc:mysql://localhost/";
@@ -51,7 +45,9 @@ public class DbWriter implements DbUtils {
 
   @Override
   public boolean isDatabaseExist(String dbName) throws SQLException {
-    return getAvailableDatabases().contains(dbName);
+    ArrayList<String> databases =  getAvailableDatabases();
+    /*chance to close this.connection*/
+    return databases.contains(dbName);
   }
 
   public ArrayList<String> getAvailableDatabases() throws SQLException{
@@ -70,12 +66,15 @@ public class DbWriter implements DbUtils {
   public boolean isDatabaseTableExist(String dbName, String tableName){
     boolean availability = false;
     try{
-      DatabaseMetaData dbMetadata = connectToDb(dbName).getMetaData();
+      Connection conn = connectToDb(dbName);
+      DatabaseMetaData dbMetadata = conn.getMetaData();
       ResultSet allTables = dbMetadata.getTables(null,null,tableName,null);
       availability =  allTables.next();
+      conn.close();
     }catch(SQLException sqconnect){
       System.err.print(sqconnect.getMessage());
     }
+
     return availability;
   }
 
@@ -87,7 +86,7 @@ public class DbWriter implements DbUtils {
       update = statement.executeUpdate("Create database "+databasename);
       closeResources(statement);
     }else {
-      throw new DbWriterException("Exception: Database " + databasename + " already exists!");
+      throw new DbWriterException("Exception: Database " + databasename + " already exists ...");
     }
     return update == 1;
   }
@@ -96,16 +95,16 @@ public class DbWriter implements DbUtils {
   public boolean deleteDatabase(String databasename) throws SQLException {
     Statement statement = this.connection.createStatement();
     return (statement.executeUpdate("Drop Database "+databasename) == 0);
-
   }
 
   @Override
   public boolean createDatabaseTable(String databasename, String tablename, ArrayList<String> tableFields) throws SQLException {
     setAttributeList(tableFields);
-    Statement statement = connectToDb(databasename).createStatement();
+    Connection conn = connectToDb(databasename);
+    Statement statement = conn.createStatement();
     int success = statement.executeUpdate(createTableQuery(tableFields,tablename,"text"));
-
-    closeResources(statement);
+    conn.close();
+    statement.close();
     return success == 0;
   }
 
