@@ -11,7 +11,5 @@ public class DatFileParserTest {
   @Test
   public void testParseFileToDb() throws Exception {
     DatFileParser datparse = new DatFileParser("Jingoid","jongoic");
-
-
   }
 }
