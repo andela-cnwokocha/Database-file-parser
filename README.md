@@ -41,6 +41,40 @@ This class implements a Runnable interface, and logs the activity of any threade
 `HashMap<String, ArrayList<String>> getBufferRow()` This method returns a full row of data.  
 `addToBufferRow(String key, String value)` : This method adds to the appropriate row the specified key and its value.
 
+###checkpoint.andela.db.DbUtils  
+This is an interface that implements methods used by the writer to write contents of a buffer into the database. It defines methods for doing CRUD functions on a the database.  
+#####Methods: 
+`java 
+ boolean isDatabaseExist(String databasename)`   
+`Connection connectToDb(String connectionType)`  
+`java Connection insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename, String tablename, ArrayList<String> rowSize)`   
+As well as methods for creating and deleting databases  
+
+###checkpoint.andela.db.DbWriter  
+`DbWriter()`    
+
+This class is for connecting a Mysql database, given the connection, and it implements the DbUtils interface. This class carries out connecting to the database, and doing all the CRUD functions on the database given the row that was provided to its appropriate method. This class assumes the user is a root user, with password 1234567890 by default (which can be changed). 
+#####Methods
+Apart from overriding methods from the interface it implements, it has additional methods
+`java  Connection establishConnection(String connectionDriver)`  
+`java  ArrayList<String> getAvailableDatabases()`  
+`void setAttributeList(ArrayList<String> columns)`     
+ `java String insertIntoTableString(int fieldsSize, String databasename, String tablename)`   
+`java String createTableQuery(ArrayList<String> fields, String tablename, String datatype)`   
+`java String inserter(String key, HashMap<String,ArrayList<String>> row)`    
+
+###checkpoint.andela.db.DbWriterException
+This is the exception class thrown by the dbwriter.
+
+###checkpoint.andela.db.DbWriterThread
+```java
+DbWriterThread(BlockingQueue<String> logbuffer, BlockingQueue<HashMap<String,ArrayList<String>>>
+      fileToDbBuffer, ArrayList<String> rowSize)
+```   
+This class extends DbWriter and implements Runnable. It is the main class built for the file I want to read into the database. Aside from the **`run()`** method, it has the **`String threadActivityString(String uniqueid)`** method, which is used format strings that are put into the logbuffer.  
+
+#### Tests  
+There are also tests for all packages.
 
  
 
