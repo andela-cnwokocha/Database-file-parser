@@ -19,10 +19,13 @@ public class FileParser implements Runnable, ThreadActivityString{
 
   private String filepath;
   private HashedArray row = new HashedArray();
-  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(5);
-  private BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(5);
+  private BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer =
+      new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(5);
+  private BlockingQueue<String> logBuffer =
+      new ArrayBlockingQueue<String>(5);
 
-  public FileParser(String filetoberead, BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer,BlockingQueue<String> logbuffer) {
+  public FileParser(String filetoberead, BlockingQueue<HashMap<String,
+      ArrayList<String>>> fileToDbBuffer,BlockingQueue<String> logbuffer) {
     this.filepath = filetoberead;
     this.fileToDbBuffer = fileToDbBuffer;
     this.logBuffer = logbuffer;
