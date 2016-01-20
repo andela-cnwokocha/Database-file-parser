@@ -42,111 +42,111 @@ public class DbWriterTest {
 
   }
 
-    @Test
-    public void testIsDatabaseTableExist() throws Exception {
-      ArrayList<String> fields = new ArrayList<>();
-      fields.add("UNIQUE-ID");
-      fields.add("CLASS");
-      fields.add("LEFT");
-      fields.add("RIGHT");
-      fields.add("OCTRO");
+  @Test
+  public void testIsDatabaseTableExist() throws Exception {
+    ArrayList<String> fields = new ArrayList<>();
+    fields.add("UNIQUE-ID");
+    fields.add("CLASS");
+    fields.add("LEFT");
+    fields.add("RIGHT");
+    fields.add("OCTRO");
 
-      DbWriter writer = new DbWriter();
-      assertFalse(writer.isDatabaseExist("Holey"));
-      writer.createDatabase("Holey");
-      assertTrue(writer.isDatabaseExist("Holey"));
-      assertFalse(writer.isDatabaseTableExist("Holey","Moley"));
-      writer.createDatabaseTable("Holey","Moley", fields);
-      assertTrue(writer.isDatabaseTableExist("Holey","Moley"));
-    }
+    DbWriter writer = new DbWriter();
+    assertFalse(writer.isDatabaseExist("Holey"));
+    writer.createDatabase("Holey");
+    assertTrue(writer.isDatabaseExist("Holey"));
+    assertFalse(writer.isDatabaseTableExist("Holey","Moley"));
+    writer.createDatabaseTable("Holey","Moley", fields);
+    assertTrue(writer.isDatabaseTableExist("Holey","Moley"));
+  }
 
-      @Test
-      public void testCreateDatabase() throws Exception {
-        ArrayList<String> fields = new ArrayList<>();
-        fields.add("UNIQUE-ID");
-        fields.add("CLASS");
-        fields.add("LEFT");
-        fields.add("RIGHT");
-        fields.add("OCTRO");
+  @Test
+  public void testCreateDatabase() throws Exception {
+    ArrayList<String> fields = new ArrayList<>();
+    fields.add("UNIQUE-ID");
+    fields.add("CLASS");
+    fields.add("LEFT");
+    fields.add("RIGHT");
+    fields.add("OCTRO");
 
-        DbWriter writer = new DbWriter();
+    DbWriter writer = new DbWriter();
 
-        writer.createDatabase("reactions");
+    writer.createDatabase("reactions");
 
-        assertTrue( writer.isDatabaseExist("reactions"));
-      }
+    assertTrue( writer.isDatabaseExist("reactions"));
+  }
 
-        @Test
-        public void testDeleteDatabase() throws Exception {
-          ArrayList<String> fields = new ArrayList<>();
-          fields.add("UNIQUE-ID");
-          fields.add("CLASS");
-          fields.add("LEFT");
-          fields.add("RIGHT");
-          fields.add("OCTRO");
+  @Test
+  public void testDeleteDatabase() throws Exception {
+    ArrayList<String> fields = new ArrayList<>();
+    fields.add("UNIQUE-ID");
+    fields.add("CLASS");
+    fields.add("LEFT");
+    fields.add("RIGHT");
+    fields.add("OCTRO");
 
-          DbWriter writer = new DbWriter();
+    DbWriter writer = new DbWriter();
 
-          assertFalse(writer.isDatabaseExist("reactions"));
+    assertFalse(writer.isDatabaseExist("reactions"));
 
-          writer.createDatabase("reactions");
+    writer.createDatabase("reactions");
 
-          assertTrue(writer.isDatabaseExist("reactions"));
+    assertTrue(writer.isDatabaseExist("reactions"));
 
-          writer.deleteDatabase("reactions");
+    writer.deleteDatabase("reactions");
 
-          assertFalse(writer.isDatabaseExist("reactions"));
+    assertFalse(writer.isDatabaseExist("reactions"));
 
-        }
+  }
 
-         @Test
-         public void testCreateDatabaseTable() throws Exception {
-           ArrayList<String> fields = new ArrayList<>();
-           fields.add("UNIQUE-ID");
-           fields.add("CLASS");
-           fields.add("LEFT");
-           fields.add("RIGHT");
-           fields.add("OCTRO");
+  @Test
+  public void testCreateDatabaseTable() throws Exception {
+    ArrayList<String> fields = new ArrayList<>();
+    fields.add("UNIQUE-ID");
+    fields.add("CLASS");
+    fields.add("LEFT");
+    fields.add("RIGHT");
+    fields.add("OCTRO");
 
-           DbWriter writer = new DbWriter();
+    DbWriter writer = new DbWriter();
 
-           writer.createDatabase("Ration");
-           assertFalse(writer.isDatabaseTableExist("Ration","ratio"));
-           writer.createDatabaseTable("Ration","ratio", fields);
-           assertTrue(writer.isDatabaseTableExist("Ration","ratio"));
+    writer.createDatabase("reactions");
+    assertFalse(writer.isDatabaseTableExist("reactions","react"));
+    writer.createDatabaseTable("reactions","react", fields);
+    assertTrue(writer.isDatabaseTableExist("reactions","react"));
 
-         }
-
-
-           @Test
-           public void testInsertToDatabaseTable() throws Exception {
-             ArrayList<String> fields = new ArrayList<>();
-             fields.add("UNIQUE-ID");
-             fields.add("CLASS");
-             fields.add("LEFT");
-             fields.add("RIGHT");
-             fields.add("OCTRO");
+  }
 
 
-             DbWriter writer = new DbWriter();
-             HashedArray hashedArray = new HashedArray();
+  @Test
+  public void testInsertToDatabaseTable() throws Exception {
+    ArrayList<String> fields = new ArrayList<>();
+    fields.add("UNIQUE-ID");
+    fields.add("CLASS");
+    fields.add("LEFT");
+    fields.add("RIGHT");
+    fields.add("OCTRO");
 
-             hashedArray.addToBufferRow("UNIQUE-ID","Chidiebere");
-             hashedArray.addToBufferRow("CLASS", "Andela");
-             hashedArray.addToBufferRow("UNIQUE-ID","Nwokocha");
-             hashedArray.addToBufferRow("CLASS", "Youth tech");
-             hashedArray.addToBufferRow("LEFT","handed");
-             hashedArray.addToBufferRow("RIGHT", "Food");
-             hashedArray.addToBufferRow("RIGHT","CLeft hand");
-             hashedArray.addToBufferRow("OCTRO", "kwamdle");
 
-             writer.createDatabase("Alonso");
-             writer.createDatabaseTable("Alonso", "friends", fields);
-             HashMap<String, ArrayList<String>> row = hashedArray.getBufferRow();
+    DbWriter writer = new DbWriter();
+    HashedArray hashedArray = new HashedArray();
 
-             writer.insertToDatabaseTable(row,"Alonso","friends",fields);
+    hashedArray.addToBufferRow("UNIQUE-ID","Chidiebere");
+    hashedArray.addToBufferRow("CLASS", "Andela");
+    hashedArray.addToBufferRow("UNIQUE-ID","Nwokocha");
+    hashedArray.addToBufferRow("CLASS", "Youth tech");
+    hashedArray.addToBufferRow("LEFT","handed");
+    hashedArray.addToBufferRow("RIGHT", "Food");
+    hashedArray.addToBufferRow("RIGHT","CLeft hand");
+    hashedArray.addToBufferRow("OCTRO", "kwamdle");
 
-           }
+    writer.createDatabase("Alonso");
+    writer.createDatabaseTable("Alonso", "friends", fields);
+    HashMap<String, ArrayList<String>> row = hashedArray.getBufferRow();
+
+    writer.insertToDatabaseTable(row,"Alonso","friends",fields);
+
+  }
 
   @Test
   public void testInsertIntoDbString() throws Exception {

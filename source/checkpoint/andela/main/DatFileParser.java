@@ -15,7 +15,7 @@ public class DatFileParser {
   private static BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(10);
   private static String outputpath;
   private static String inputpath;
-  private static String[] tableColumns = {"UNIQUE-ID","TYPES","COMMON-NAME","ATOM-MAPPINGS","CANNOT-BALANCE?","COMMENT","COMMENT-INTERNAL","CREDITS","DELTAG0","EC-NUMBER","ENZYMATIC-REACTION","IN-PATHWAY","LEFT","MEMBER-SORT-FN","ORPHAN?","PHYSIOLOGICALLY-RELEVANT?","PREDECESSORS","PRIMARIES","REACTION-DIRECTION","REACTION-LIST","RIGHT","RXN-LOCATIONS","SPONTANEOUS?","STD-REDUCTION-POTENTIAL","SYNONYMS","SYSTEMATIC-NAME",};
+  private static String[] tableColumns = {"UNIQUE-ID","TYPES","COMMON-NAME","ATOM-MAPPINGS","CANNOT-BALANCE?","COMMENT","COMMENT-INTERNAL","CREDITS","DELTAG0","EC-NUMBER","ENZYMATIC-REACTION","IN-PATHWAY","LEFT","MEMBER-SORT-FN","ORPHAN?","PHYSIOLOGICALLY-RELEVANT?","PREDECESSORS","PRIMARIES","REACTION-DIRECTION","REACTION-LIST","RIGHT","RXN-LOCATIONS","SPONTANEOUS?","STD-REDUCTION-POTENTIAL","SYNONYMS","SYSTEMATIC-NAME"};
   ArrayList<String> columns = new ArrayList<>(Arrays.asList(tableColumns));
 
   public DatFileParser(String inputFilePath, String outputFilePath){
@@ -29,29 +29,13 @@ public class DatFileParser {
     Logger logger = new Logger(logBuffer,outputpath);
 
     ExecutorService executor = Executors.newFixedThreadPool(4);
+
+
     executor.submit(dbwriter);
     executor.submit(fileParser);
-
     executor.submit(logger);
 
-    executor.awaitTermination(1, TimeUnit.HOURS);
+    executor.awaitTermination(1, TimeUnit.MINUTES);
     executor.shutdown();
   }
-
-
-  public static void main(String [] args) throws InterruptedException,DbWriterException,SQLException{
-    DatFileParser datfp = new DatFileParser("/home/chidi/Desktop/reactions.dat","/home/chidi/Desktop/jocker.txt");
-
-    //Setup database and table
-    ArrayList<String> columns = new ArrayList<>(Arrays.asList(tableColumns));
-    DbWriter writer = new DbWriter();
-    writer.createDatabase("reactions");
-    writer.createDatabaseTable("reactions", "react", columns);
-
-    Thread.sleep(100);
-    // Implement processing from file to database and output file.
-    datfp.parseToDb();
-
-  }
-
 }

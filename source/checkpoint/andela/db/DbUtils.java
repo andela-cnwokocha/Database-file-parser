@@ -1,6 +1,5 @@
 package checkpoint.andela.db;
 
-import checkpoint.andela.buffers.*;
 import java.sql.*;
 import java.util.*;
 
@@ -19,9 +18,11 @@ public interface DbUtils {
 
   boolean deleteDatabase(String databasename) throws SQLException;
 
-  boolean createDatabaseTable(String databasename, String tablename, ArrayList<String> databaseFields) throws SQLException, DbWriterException;
+  boolean createDatabaseTable(String databasename, String tablename, ArrayList<String> databaseFields)
+      throws SQLException, DbWriterException;
 
-  Connection insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename, String tablename, ArrayList<String> rowSize) throws SQLException;
+  Connection insertToDatabaseTable(HashMap<String, ArrayList<String>> row, String databasename,
+                                   String tablename, ArrayList<String> rowSize) throws SQLException;
 
   Connection connectToDb(String connectionType) throws SQLException;
 

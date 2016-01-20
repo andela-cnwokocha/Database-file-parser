@@ -1,44 +1,25 @@
 package checkpoint.andela.parser;
 
-import checkpoint.andela.db.*;
+
 import org.junit.*;
-import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import static org.junit.Assert.*;
 
 /**
  * Created by chidi on 1/16/16.
  */
 public class FileParserTest {
-/*
-  @Test
-  public void testPareFile() throws Exception {
-    FileParser fp = new FileParser("/home/chidi/Desktop/writeTo.log");
-
-    fp.readFile("/", " - ","#");
-    assertTrue(fp.numberOfRows() == 20);
-  }
 
   @Test
-  public void testWritingFromBufferToDb() throws Exception {
-    ArrayList<String> fields = new ArrayList<>();
-    fields.add("UNIQUE-ID");
-    fields.add("CLASS");
-    fields.add("LEFT");
-    fields.add("RIGHT");
-    fields.add("OCTRO");
+  public void testFileParseToBufferAndLog() throws Exception {
+    BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(20);
+    BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(20);
 
-    FileParser fp = new FileParser("/home/chidi/Desktop/writeTo.log");
-    fp.setColumns(fields);
-
-    Thread.sleep(3000);
-    System.out.println("ready");
-
-    //assuming the database and table already exists
-    fp.prod("/"," - ","#");
-    fp.cons("reactions","reacts");
-
+    FileParser fp = new FileParser("/home/chidi/Desktop/writeTo.log",fileToDbBuffer,logBuffer);
+    fp.run();
+    assertTrue(fileToDbBuffer.size() == 20);
+    assertEquals(fileToDbBuffer.size(),20);
   }
-*/
 
 }
