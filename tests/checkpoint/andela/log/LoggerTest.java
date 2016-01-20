@@ -14,7 +14,7 @@ public class LoggerTest {
     BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(10);
 
     Logger logger = new Logger(logbuffer, "/home/chidi/Desktop/jocker.txt");
-    Thread t1 = new Thread(new Runnable() {
+    Thread playThread = new Thread(new Runnable() {
       @Override
       public void run() {
        try{
@@ -26,8 +26,10 @@ public class LoggerTest {
        }
       }
     });
-    t1.start();
-    logger.run();
+
+    ExecutorService exec = Executors.newFixedThreadPool(4);
+    exec.submit(playThread);
+    exec.submit(logger);
   }
 
 }

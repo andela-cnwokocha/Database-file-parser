@@ -7,7 +7,7 @@ import java.util.concurrent.*;
  * Created by chidi on 1/17/16.
  */
 public class Logger implements Runnable{
-  private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(10);
+  private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(5);
   private String writeToPath;
 
   public Logger(BlockingQueue<String> logbuffer, String outputPath){
@@ -16,21 +16,19 @@ public class Logger implements Runnable{
   }
 
   public void run() {
-    while(true){
-      try{
+    while(true) {
+      try {
         logActivity();
-      }catch(IOException | InterruptedException ie){
-        System.err.println(ie.getMessage());
+      } catch(IOException | InterruptedException ie) {
       }
     }
   }
 
-  private void logActivity() throws IOException,InterruptedException{
-      try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(this.writeToPath, true)))) {
+  private void logActivity() throws IOException,InterruptedException {
+      try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(writeToPath, true)))) {
         String activity = logbuffer.take();
         out.println(activity);
-      }catch (IOException e) {
-        System.err.println(e);
+      } catch (IOException e) {
       }
   }
 
