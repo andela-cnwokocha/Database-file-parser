@@ -1,5 +1,6 @@
 package checkpoint.andela.log;
 
+import checkpoint.andela.buffers.*;
 import java.io.*;
 import java.util.concurrent.*;
 
@@ -7,11 +8,11 @@ import java.util.concurrent.*;
  * Created by chidi on 1/17/16.
  */
 public class Logger implements Runnable{
-  private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(5);
+  ReactionSingleton reactionSingleton = ReactionSingleton.getInstance();
+  private BlockingQueue<String> logbuffer = reactionSingleton.getLogBuffer();
   private String writeToPath;
 
-  public Logger(BlockingQueue<String> logbuffer, String outputPath){
-    this.logbuffer = logbuffer;
+  public Logger(String outputPath){
     this.writeToPath = outputPath;
   }
 

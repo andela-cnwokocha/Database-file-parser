@@ -1,5 +1,6 @@
 package checkpoint.andela.db;
 
+import checkpoint.andela.buffers.*;
 import checkpoint.andela.log.*;
 import java.sql.*;
 import java.text.*;
@@ -9,15 +10,13 @@ import java.util.concurrent.*;
 
 
 public class DbWriterThread extends DbWriter implements Runnable, ThreadActivityString {
-  private BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(5);
-  private BlockingQueue<HashMap<String,ArrayList<String>>> filetodbBuffer =
-      new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(5);
+  ReactionSingleton reactionSingleton = ReactionSingleton.getInstance();
+  private BlockingQueue<String> logbuffer = reactionSingleton.getLogBuffer();
+  private BlockingQueue<HashMap<String,ArrayList<String>>> filetodbBuffer = reactionSingleton.getFileToDbBuffer();
+
   private ArrayList<String> rowSize = new ArrayList<>();
 
-  public DbWriterThread(BlockingQueue<String> logbuffer, BlockingQueue<HashMap<String,ArrayList<String>>>
-      fileToDbBuffer, ArrayList<String> rowSize) {
-    this.logbuffer = logbuffer;
-    this.filetodbBuffer = fileToDbBuffer;
+  public DbWriterThread(ArrayList<String> rowSize) {
     this.rowSize = rowSize;
   }
 
