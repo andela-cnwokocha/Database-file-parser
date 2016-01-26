@@ -15,21 +15,18 @@ public class ReactionSingleton {
   public ReactionSingleton() {
   }
 
-  //get my buffers
   public BlockingQueue<HashMap<String,ArrayList<String>>> getFileToDbBuffer () {
     return fileToDbBuffer;
   }
+
   public BlockingQueue<String> getLogBuffer() {
     return logBuffer;
   }
 
-  //get the class instance
   public static ReactionSingleton getInstance() {
     if (ourInstance == null){
       ourInstance = new ReactionSingleton();
     }
     return ourInstance;
   }
-
-
 }
