@@ -129,20 +129,20 @@ public class DbWriterTest {
 
 
     DbWriter writer = new DbWriter();
-    HashedArray hashedArray = new HashedArray();
+    ReactionArray reactionArray = new ReactionArray();
 
-    hashedArray.addToBufferRow("UNIQUE-ID","Chidiebere");
-    hashedArray.addToBufferRow("CLASS", "Andela");
-    hashedArray.addToBufferRow("UNIQUE-ID","Nwokocha");
-    hashedArray.addToBufferRow("CLASS", "Youth tech");
-    hashedArray.addToBufferRow("LEFT","handed");
-    hashedArray.addToBufferRow("RIGHT", "Food");
-    hashedArray.addToBufferRow("RIGHT","CLeft hand");
-    hashedArray.addToBufferRow("OCTRO", "kwamdle");
+    reactionArray.addToBufferRow("UNIQUE-ID","Chidiebere");
+    reactionArray.addToBufferRow("CLASS", "Andela");
+    reactionArray.addToBufferRow("UNIQUE-ID","Nwokocha");
+    reactionArray.addToBufferRow("CLASS", "Youth tech");
+    reactionArray.addToBufferRow("LEFT","handed");
+    reactionArray.addToBufferRow("RIGHT", "Food");
+    reactionArray.addToBufferRow("RIGHT","CLeft hand");
+    reactionArray.addToBufferRow("OCTRO", "kwamdle");
 
     writer.createDatabase("Alonso");
     writer.createDatabaseTable("Alonso", "friends", fields);
-    HashMap<String, ArrayList<String>> row = hashedArray.getBufferRow();
+    HashMap<String, ArrayList<String>> row = reactionArray.getBufferRow();
 
     writer.insertToDatabaseTable(row,"Alonso","friends",fields);
 

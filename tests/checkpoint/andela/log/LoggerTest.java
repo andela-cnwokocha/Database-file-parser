@@ -13,7 +13,7 @@ public class LoggerTest {
   public void testWritingToPath() throws Exception {
     BlockingQueue<String> logbuffer = new ArrayBlockingQueue<String>(10);
 
-    Logger logger = new Logger(logbuffer, "/home/chidi/Desktop/jocker.txt");
+    Logger logger = new Logger("/home/chidi/Desktop/jocker.txt");
     Thread playThread = new Thread(new Runnable() {
       @Override
       public void run() {

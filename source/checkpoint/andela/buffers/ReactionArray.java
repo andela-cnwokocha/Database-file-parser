@@ -6,10 +6,10 @@ import java.util.*;
  * Created by chidi on 1/14/16.
  * This is the data structure use across the application to hold the data. It is a key-valued. Consisting of a
  */
-public class HashedArray {
+public class ReactionArray {
   private HashMap<String, ArrayList<String>> hashes = new HashMap<String, ArrayList<String>>();
 
-  public HashedArray(){
+  public ReactionArray(){
   }
 
   public boolean rowHasKey(String key) {
