@@ -11,8 +11,6 @@ import java.util.concurrent.*;
  * Created by chidi on 1/17/16.
  */
 public class DatFileParser {
-  //private static BlockingQueue<HashMap<String,ArrayList<String>>> fileToDbBuffer = new ArrayBlockingQueue<HashMap<String, ArrayList<String>>>(10);
-  //private static BlockingQueue<String> logBuffer = new ArrayBlockingQueue<String>(10);
   private static String outputpath;
   private static String inputpath;
   private static String[] tableColumns = {"UNIQUE-ID","TYPES","COMMON-NAME","ATOM-MAPPINGS","CANNOT-BALANCE?","COMMENT","COMMENT-INTERNAL","CREDITS","DELTAG0","EC-NUMBER","ENZYMATIC-REACTION","IN-PATHWAY","LEFT","MEMBER-SORT-FN","ORPHAN?","PHYSIOLOGICALLY-RELEVANT?","PREDECESSORS","PRIMARIES","REACTION-DIRECTION","REACTION-LIST","RIGHT","RXN-LOCATIONS","SPONTANEOUS?","STD-REDUCTION-POTENTIAL","SYNONYMS","SYSTEMATIC-NAME"};
